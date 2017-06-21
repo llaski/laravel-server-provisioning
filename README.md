@@ -20,8 +20,6 @@ ansible-playbook -i hosts playbook.yml
 
 ######
 
-ssh -i /Users/LarryLaski/.ssh/digital_ocean_built_by_larry_rsa root@104.131.175.203
-
 - apt updates
 - set server timezone to UTC
 - users
