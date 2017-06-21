@@ -2,41 +2,13 @@
 
 - name: Create Project Folder
   file: path={{ project_root }} state=directory mode=0775 owner=www-data group=www-data
-  # register: dir_created
-
-# - name: Ensure directories are 0775
-#   when: dir_created|success
-#   command: find {{ project_root }} -type d -exec chmod -c 0775 {} \;
-#   register: dirs_updated
-#   changed_when: "dirs_updated.stdout != \"\""
-
-# - name: Ensure files are 0664
-#   when: dir_created|success
-#   command: find {{ project_root }} -type f -exec chmod -c 0664 {} \;
-#   register: files_updated
-#   changed_when: "files_updated.stdout != \"\""
 
 - name: Setup Github Repo
-  # when:
-  #   - dirs_updated|success
-  #   - files_updated|success
   git:  repo={{ github_repo }}
         dest={{ project_root }}
         accept_hostkey=yes
         key_file="/root/.ssh/{{ server_name }}"
-  # become: yes
-  # become_user: {{ git_user }}
   register: gitrepoinstalled
-  notify:
-    - Reload Nginx
-
-- name: Composer install
-  when: gitrepoinstalled|success
-  # become: yes
-  # become_user: {{ git_user }}
-  composer:
-    command: install
-    working_dir: "{{ project_root }}"
   notify:
     - Reload Nginx
 

@@ -5,3 +5,9 @@
 
 - name: Install Node
   apt: pkg=nodejs state=installed update_cache=yes
+
+- name: Install Node Global Modules
+  npm:
+    name: "{{ item }}"
+    global: yes
+  with_items: "{{ node_global_modules }}"

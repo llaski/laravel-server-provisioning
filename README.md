@@ -6,48 +6,34 @@
 
 # Commands
 
-Run Playbook
+Run Playbooks
+
 ```
 ansible-playbook -i hosts provision.yml
+ansible-playbook -i hosts deploy.yml
 ```
 
 ## Setup Instructions
 
 - Setup encryption vault file
 - Customize Variables
-- Generate and configure ssh keys for repo
+- Encrypt group vars
+- Generate ssh key
 
     ssh-keygen -t rsa -b 4096 -C "john@example.com"
 
-- Encypt group vars and ssh keys
+- Add key to github repo
+- Encrypt ssh keys
 
 ######
 
 To Do
 
-- get apt restart working
-- deploy playbook
-- bash scripts to fast track setup
+- test deploy playbook
 
-```
-cd /var/www/example.com
-git pull
-composer install --no-interaction --prefer-dist --optimize-autoloader
-
-npm install
-npm run prod
-
-php artisan dump-autoload
-php artisan migrate --force
-php artisan cache:clear
-
-php reload
-
-if [ -f artisan ]
-then
-    php artisan migrate --force
-fi
-```
+- Advanced
+    - Bash scripts to fast track setup
+    - Symlink deployment setup (Zero Downtime)
 
 -----
 

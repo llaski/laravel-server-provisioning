@@ -1,0 +1,19 @@
+---
+
+- name: Install Cron to Renew Certs
+  when: ssl_enabled
+  cron:
+    name: "LetsEncrypt Renewal"
+    day: "*"
+    hour: 1
+    minute: 30
+    job: "/usr/bin/letsencrypt renew >> /var/log/le-renew.log"
+
+- name: Install Cron to Reload Nginx
+  when: ssl_enabled
+  cron:
+    name: "Reload Nginx"
+    day: "*"
+    hour: 1
+    minute: 45
+    job: "/bin/systemctl reload nginx"

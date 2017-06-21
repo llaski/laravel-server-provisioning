@@ -38,7 +38,4 @@
     - Reload Nginx
 
 - name: Create Site Directory
-  file: path={{ web_root }} state=directory mode=775 owner=www-data group=www-data recurse=yes
-
-# - include: crontab.yml
-#   when: nginx_ssl_params_installed|success
+  file: path={{ project_root }} state=directory mode=775 owner=www-data group=www-data recurse=yes

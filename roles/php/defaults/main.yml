@@ -6,14 +6,18 @@ php_ppa: "ppa:ondrej/php"
 php_version: 7.1
 
 php_modules:
+  - php-fpm
   - php-mcrypt
   - php-mysql
+  - php-pgsql
+  - php-sqlite3
   - php-curl
   - php-json
   - php-xml
   - php-mbstring
   - php-zip
   - php-bcmath
+  - php-gd
 
 php_timezone: Europe/London
 php_post_max_size: "20M"

@@ -1,7 +1,7 @@
 ---
 
 - name: Execute Playbook
-  hosts: testing
+  hosts: local
   user: root
   become: yes
   gather_facts: no
@@ -17,6 +17,6 @@
     - nginx
     - php
     - node
-    - ssh
     - git
     - ssl
+    - crontab

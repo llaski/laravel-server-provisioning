@@ -1,7 +1,7 @@
 ---
 
 - name: Set Permissions for www dir
-  file: path=/var/www state=directory mode=0775 owner=www-data group=web
+  file: path=/var/www state=directory mode=0644 owner=www-data group=www-data
   register: dir_updated
 
 - name: Setup global git config

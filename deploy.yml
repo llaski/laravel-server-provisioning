@@ -1,0 +1,58 @@
+---
+
+- name: Execute Playbook
+  hosts: local
+  user: root
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Setup Github Repo
+      git:  repo={{ github_repo }}
+            dest={{ project_root }}
+            accept_hostkey=yes
+            key_file="/root/.ssh/{{ server_name }}"
+
+    - name: Install Composer dependencies
+      composer:
+        command: install
+        working_dir: "{{ project_root }}"
+        prefer_dist: true
+        optimize_autoloader: true
+      register: install_composer_dependencies
+
+    - debug: var=install_composer_dependencies.stdout_lines
+
+    - name: Install NPM dependencies
+      command: npm install
+      args:
+        chdir:  "{{ project_root }}"
+      register: install_npm_dependencies
+
+    - debug: var=install_npm_dependencies.stdout_lines
+
+    - name: Build assets
+      command: npm run production
+      args:
+        chdir:  "{{ project_root }}"
+      register: build_assets
+
+    - debug: var=build_assets.stdout_lines
+
+    # - name: Artisan Migrate
+    #   command: php artisan migrate --force
+    #   args:
+    #     chdir:  "{{ project_root }}"
+    #   register: artisan_migrate
+
+    # - debug: var=artisan_migrate.stdout_lines
+
+    - name: Artisan Clear Cache
+      command: php artisan cache:clear
+      args:
+        chdir:  "{{ project_root }}"
+      register: artisan_clear_cache
+
+    - debug: var=artisan_clear_cache.stdout_lines
+
+    - name: Reload Nginx
+      service: name=nginx state=reloaded
