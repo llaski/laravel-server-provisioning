@@ -3,3 +3,21 @@
 - name: Install letsencrypt
   when: ssl_enabled
   apt: name=letsencrypt state=present
+
+- name: Check Full Chain File Exists
+  when: ssl_enabled
+  stat: path=/etc/letsencrypt/live/{{ server_name }}/fullchain.pem
+  register: ssl_chain_file
+
+- name: Check Priv Key File Exists
+  when: ssl_enabled
+  stat: path=/etc/letsencrypt/live/{{ server_name }}/privkey.pem
+  register: ssl_priv_file
+
+- name: Generate SSL Certificate via LetsEncrypt
+  when:
+    - ssl_enabled
+    - ssl_chain_file.stat.islnk is not defined or ssl_priv_file.stat.islnk is not defined
+  command: "letsencrypt certonly -n --agree-tos -a webroot --webroot-path {{ web_root }} --domain {{ server_name }} --email {{ letsencrypt_email }} --expand --verbose"
+  notify:
+    - Restart Nginx

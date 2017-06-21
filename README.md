@@ -8,43 +8,48 @@
 
 Run Playbook
 ```
-ansible-playbook -i hosts playbook.yml
+ansible-playbook -i hosts provision.yml
 ```
-
 
 ## Setup Instructions
 
 - Setup encryption vault file
 - Customize Variables
-- Add/Generate ssh keys
+- Generate and configure ssh keys for repo
+
+    ssh-keygen -t rsa -b 4096 -C "john@example.com"
+
+- Encypt group vars and ssh keys
 
 ######
 
-- apt updates
-- set server timezone to UTC
-- users
-- ssh
-- git
-- nginx
-- php fpm
- - php ini settings - https://github.com/konomae/ansible-laravel-settler/blob/master/tasks/main.yml
-- ssl
-- node w/ yarn
-- ufw
+To Do
 
-- get restart working
+- get apt restart working
+- deploy playbook
+
+```
+cd /var/www/example.com
+git pull
+composer install --no-interaction --prefer-dist --optimize-autoloader
+
+npm install
+npm run prod
+
+php artisan dump-autoload
+php artisan migrate --force
+php artisan cache:clear
+
+php reload
+
+if [ -f artisan ]
+then
+    php artisan migrate --force
+fi
+```
 
 -----
-
-https://github.com/aligajani/ansible-playbooks-laravel-5
-https://github.com/mkudenko/vagrant-ansible-laravel
 
 - opcache configuration
     - https://ma.ttias.be/a-better-way-to-run-php-fpm/
     - https://medium.com/appstract/make-your-laravel-app-fly-with-php-opcache-9948db2a5f93
-
-
-
-
-
-laravel deployment command - possibly use envoyer on a per project basis

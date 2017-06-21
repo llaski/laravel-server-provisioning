@@ -13,6 +13,7 @@ php_modules:
   - php-xml
   - php-mbstring
   - php-zip
+  - php-bcmath
 
 php_timezone: Europe/London
 php_post_max_size: "20M"

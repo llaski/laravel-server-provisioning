@@ -13,10 +13,10 @@
   roles:
     - apt
     - users
-    # - ssh
     - ufw
     - nginx
     - php
     - node
-    # - git
-    # - mysql
+    - ssh
+    - git
+    - ssl

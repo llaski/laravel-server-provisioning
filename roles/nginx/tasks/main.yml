@@ -1,9 +1,20 @@
 ---
+
+- include: remove-apache.yml
+
+- name: Add Nginx Repository
+  apt_repository: repo='ppa:nginx/stable' state=present
+  register: ppastable
+
 - name: Install Nginx
-  apt: name=nginx state=installed update_cache=true
+  when: ppastable|success
+  apt: pkg=nginx state=latest update_cache=true
   register: nginxinstalled
   notify:
     - Start Nginx
+
+- name: Get PHP Version
+  include_vars: file="../../php/defaults/main.yml"
 
 - name: Add H5BP Config
   copy: src=h5bp dest=/etc/nginx owner=root group=root
@@ -19,7 +30,6 @@
     - Reload Nginx
 
 - name: Add {{ server_name }} Config
-  when: nginxinstalled|success
   template: src={{ server_name }}.conf.j2 dest=/etc/nginx/sites-available/{{ server_name }} owner=root group=root
 
 - name: Enable Site Config
@@ -28,7 +38,7 @@
     - Reload Nginx
 
 - name: Create Site Directory
-  file: path=/var/www/{{ server_name }} state=directory mode=775 owner=www-data group=www-data recurse=yes
+  file: path={{ web_root }} state=directory mode=775 owner=www-data group=www-data recurse=yes
 
 # - include: crontab.yml
 #   when: nginx_ssl_params_installed|success

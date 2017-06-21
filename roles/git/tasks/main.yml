@@ -1,0 +1,25 @@
+---
+
+- name: Set Permissions for www dir
+  file: path=/var/www state=directory mode=0775 owner=www-data group=web
+  register: dir_updated
+
+- name: Setup global git config
+  git_config:
+    name: push.default
+    scope: global
+    value: 'simple'
+
+- name: Ensure github.com is a known host
+  lineinfile:
+    dest: /root/.ssh/known_hosts
+    create: yes
+    state: present
+    line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+    regexp: "^github\\.com"
+
+- include: setup-ssh-keys.yml
+  when: dir_updated|success
+
+- include: setup-repo.yml
+  when: dir_updated|success

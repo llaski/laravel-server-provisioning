@@ -1,7 +1,7 @@
 # Bash Profile
 
 # ALIASED SHORTCUTS
-alias refresh='. /home/{{ user_name }}/.bash_profile'
+alias refresh='. /home/{{ user.name }}/.bash_profile'
 alias sites='cd /var/www'
 alias ll='ls -lha'
 

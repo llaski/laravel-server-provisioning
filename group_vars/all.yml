@@ -10,8 +10,10 @@ letsencrypt_email: ''
 # Users
 ############
 
-user_name: larry
-initial_user_password: secret
+users:
+  - name: john
+    initial_password: secret
+    use_root_ssh_key: true
 
 ############
 # SSL
@@ -38,9 +40,11 @@ server_name: example.com
 # Git
 ############
 
-github_repo: git@github.com:llaski/laravel-server-provisioning.git
-github_config_email: ''
-github_config_name: ''
+github_repo: git@github.com:llaski/laravel-server-provisioning-example.git
+git_user: john
+github_config_email: 'john@example.com'
+github_config_name:  'John'
+project_root: /var/www/example
 
 ############
 # Laravel Environment Variables
@@ -50,12 +54,12 @@ app_name: Laravel
 app_env: production
 app_debug: false
 app_log_level: debug
+app_key: "base64:p1YXT8fxSfmghgSDW92lDNjytZ13QwVKABxgqKD/vd4="
 app_url: https://example.com
 db_host: 127.0.0.1
 db_database: example
 db_username: root
 db_password: root
-db_port: 3306
 broadcast_driver: log
 cache_driver: file
 session_driver: file
@@ -66,3 +70,5 @@ mail_port: 2525
 mail_username: null
 mail_password: null
 mail_encryption: null
+mail_from: 'john@example.com'
+mail_name: 'John'
