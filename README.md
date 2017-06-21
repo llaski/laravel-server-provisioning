@@ -27,6 +27,7 @@ To Do
 
 - get apt restart working
 - deploy playbook
+- bash scripts to fast track setup
 
 ```
 cd /var/www/example.com
