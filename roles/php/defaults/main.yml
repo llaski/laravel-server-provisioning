@@ -1,0 +1,37 @@
+---
+
+#PHP Configuration
+
+php_ppa: "ppa:ondrej/php"
+php_version: 7.1
+
+php_modules:
+  - php-mcrypt
+  - php-mysql
+  - php-curl
+  - php-json
+  - php-xml
+  - php-mbstring
+  - php-zip
+
+php_timezone: Europe/London
+php_post_max_size: "20M"
+php_upload_max_filesize: "20M"
+php_memory_limit: "1024M"
+php_max_execution_time: 60
+
+php_opcache_enable: 0
+php_opcache_revalidate_freq: 2592000
+php_opcache_opcache_validate_timestamps: 1
+php_opcache_max_accelerated_files: 20000
+php_opcache_memory_consumption: 192
+php_opcache_interned_strings_buffer: 16
+php_opcache_fast_shutdown: 1
+
+#Composer
+
+composer_path: /usr/local/bin/composer
+composer_keep_updated: true
+composer_home_path: '~/.composer'
+composer_home_owner: root
+composer_home_group: root

@@ -1,0 +1,10 @@
+.DS_Store
+._*
+*~
+
+.vagrant
+*-console.log
+fetched
+*.retry
+group_vars/testing*
+hosts-testing

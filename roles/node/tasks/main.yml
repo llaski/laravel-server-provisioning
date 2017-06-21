@@ -1,0 +1,7 @@
+---
+
+- name: Add Node PPA
+  shell: curl --silent --location https://deb.nodesource.com/setup_{{ node_version }} | bash -
+
+- name: Install Node
+  apt: pkg=nodejs state=installed update_cache=yes

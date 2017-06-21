@@ -1,0 +1,28 @@
+---
+
+- name: Add PPA Repository
+  apt_repository: repo={{ php_ppa }}
+
+- name: Update apt
+  apt: update_cache=yes
+
+- name: Install PHP
+  apt: pkg=php{{ php_version }} state=latest
+  register: phpinstalled
+
+- name: Install PHP Modules
+  when: phpinstalled|success
+  apt: name={{ item }} state=latest
+  with_items: "{{ php_modules }}"
+  register: phpmodules_installed
+  notify:
+    - Restart PHP-FPM
+
+- include: php-fpm.yml
+  when: phpmodules_installed|success
+
+- include: php-cli.yml
+  when: phpmodules_installed|success
+
+- include: composer.yml
+  when: phpmodules_installed|success

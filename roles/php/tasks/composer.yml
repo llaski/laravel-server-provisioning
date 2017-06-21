@@ -1,0 +1,42 @@
+---
+
+- name: Check if Composer is installed.
+  stat: "path={{ composer_path }}"
+  register: composer_bin
+
+- name: Download Composer
+  when: not composer_bin.stat.exists
+  get_url:
+    url: https://getcomposer.org/installer
+    dest: /tmp/installer
+
+- name: Install Composer
+  when: not composer_bin.stat.exists
+  shell: cat /tmp/installer | php -- --install-dir=/usr/local/bin
+  args:
+    creates: /usr/local/bin/composer
+
+- name: Rename composer.phar to composer
+  when: not composer_bin.stat.exists
+  shell: mv /usr/local/bin/composer.phar {{ composer_path }}
+  args:
+    creates: "{{ composer_path }}"
+
+- name: Make composer executable
+  file:
+    path: "{{ composer_path }}"
+    mode: a+x
+    state: file
+
+- name: Ensure composer directory exists.
+  file:
+    path: "{{ composer_home_path }}"
+    owner: "{{ composer_home_owner }}"
+    group: "{{ composer_home_group }}"
+    state: directory
+
+- name: Update Composer to latest version
+  when: composer_keep_updated
+  shell: composer self-update
+  register: composer_update
+  changed_when: "'Updating to version' in composer_update.stdout"

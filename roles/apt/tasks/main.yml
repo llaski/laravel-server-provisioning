@@ -1,0 +1,25 @@
+---
+
+- name: Upgrade APT
+  apt: upgrade=yes force=yes
+  register: aptupgraded
+
+- name: Update APT
+  when: aptupgraded|success
+  apt: update_cache=true
+  register: aptupdated
+
+- name: Restart Server
+  when:
+    - aptupgraded|success
+    - aptupdated|success
+    - aptupgraded.changed or aptupdated.changed
+  shell: sleep 2 && shutdown -r now "Reboot for Updates (Triggered by Ansible)"
+  async: 1
+  poll: 0
+  ignore_errors: true
+  register: waitforrestart
+
+- name: Wait For Server to Restart
+  when: waitforrestart.started is defined
+  local_action: wait_for host={{ inventory_hostname }} state=started port=22 delay=30 timeout=600

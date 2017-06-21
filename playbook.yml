@@ -1,0 +1,22 @@
+---
+
+- name: Execute Playbook
+  hosts: testing
+  user: root
+  become: yes
+  gather_facts: no
+  pre_tasks:
+    - name: 'install python2'
+      raw: sudo apt-get -y install python-simplejson
+    - name: 'install aptitude'
+      raw: sudo apt-get -y install aptitude
+  roles:
+    - apt
+    - users
+    # - ssh
+    - ufw
+    - nginx
+    - php
+    - node
+    # - git
+    # - mysql

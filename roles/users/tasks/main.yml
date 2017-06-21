@@ -1,0 +1,47 @@
+---
+
+- name: Add Group web
+  group: name=web state=present
+  register: groupwebcreated
+
+- name: Generate password
+  shell: python -c 'import crypt; print crypt.crypt("{{ initial_user_password }}", "$6$random_salt")'
+  register: generated_password
+
+- name: Add User {{ user_name }}
+  when: groupwebcreated|success
+  user: name={{ user_name }}
+    password={{ generated_password.stdout }}
+    update_password=on_create
+    shell=/bin/bash
+    groups="sudo,web"
+    append=yes
+  register: addeduser
+
+- name: Add Bash Profile
+  when: addeduser|success
+  template:
+    src=.bash_profile
+    dest=/home/{{ user_name }}/.bash_profile
+    owner=www-data
+    group=web
+
+- name: Creates ssh directory
+  when: addeduser|success
+  file: path=/home/{{ user_name }}/.ssh state=directory owner={{ user_name }} group={{ user_name }}
+  register: addedsshdir
+
+- name: Copy Root SSH Key for access
+  when: addedsshdir|success
+  command: cp /root/.ssh/authorized_keys /home/{{ user_name }}/.ssh/authorized_keys
+  register: authorized_keys
+
+- name: Update Authorized Keys file
+  when: authorized_keys|success
+  file: path=/home/{{ user_name }}/.ssh/authorized_keys owner={{ user_name }} group={{ user_name }} mode=0600
+  register: authorized_keys_file_update
+
+- name: Disable password login
+  when: authorized_keys_file_update|success and not authorized_keys_file_update|skipped
+  lineinfile: dest=/etc/ssh/sshd_config regexp="^#?PasswordAuthentication" line="PasswordAuthentication no"
+  notify: Restart SSHD

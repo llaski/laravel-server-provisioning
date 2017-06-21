@@ -1,0 +1,17 @@
+---
+
+- name: Set Firewall Default policy
+  ufw: state=enabled policy=reject
+
+- name: Allow SSH Access
+  ufw: rule=allow port=ssh
+
+- name: Allow HTTP
+  ufw: rule=allow port=http
+
+- name: Allow HTTPS
+  when: ssl_enabled
+  ufw: rule=allow port=https
+
+- name: Allow FTP
+  ufw: rule=allow port=ftp

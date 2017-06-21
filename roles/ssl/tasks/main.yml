@@ -1,0 +1,5 @@
+---
+
+- name: Install letsencrypt
+  when: ssl_enabled
+  apt: name=letsencrypt state=present
