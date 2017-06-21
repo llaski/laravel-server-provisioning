@@ -38,13 +38,13 @@
 
     - debug: var=build_assets.stdout_lines
 
-    # - name: Artisan Migrate
-    #   command: php artisan migrate --force
-    #   args:
-    #     chdir:  "{{ project_root }}"
-    #   register: artisan_migrate
+    - name: Artisan Migrate
+      command: php artisan migrate --force
+      args:
+        chdir:  "{{ project_root }}"
+      register: artisan_migrate
 
-    # - debug: var=artisan_migrate.stdout_lines
+    - debug: var=artisan_migrate.stdout_lines
 
     - name: Artisan Clear Cache
       command: php artisan cache:clear
