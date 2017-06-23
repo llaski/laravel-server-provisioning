@@ -21,5 +21,8 @@
 - name: Remove Initial SSL Site Config
   file: path=/etc/nginx/sites-available/initial-ssl-setup state=absent
 
+- name: Remove .well-known directory
+  file: path={{ project_root }}/.well-known state=absent
+
 - include: setup-site.yml
 

@@ -62,6 +62,14 @@
 
     - debug: var=artisan_clear_cache.stdout_lines
 
+    - name: Artisan Optimize
+      command: php artisan optimize
+      args:
+        chdir:  "{{ project_root }}"
+      register: artisan_optimize
+
+    - debug: var=artisan_optimize.stdout_lines
+
     - name: Clean up folder/file permissions and user/group settings
       file: path={{ project_root }} owner=www-data group=www-data recurse=yes
 

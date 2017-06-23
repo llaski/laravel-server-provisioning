@@ -26,6 +26,9 @@
   notify:
     - Reload Nginx
 
+- name: Ensure {{ sites_root }} Directory has correct permissions, user and group
+  file: path={{ sites_root }} state=directory owner=www-data group=www-data mode=0755
+
 - name: Create {{ project_root }} Directory
   file: path={{ project_root }} state=directory owner=www-data group=www-data recurse=yes
 

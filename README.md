@@ -21,7 +21,7 @@ ansible-playbook -i hosts deploy.yml --vault-password-file ~/.ansible/vault_pass
 - Setup encryption vault file
 - Customize Variables
 - Encrypt group vars
-- Generate ssh key
+- Generate ssh key (ensure they match your domain name - so key for example.com should be named just that - example.com)
 
     ssh-keygen -t rsa -b 4096 -C "john@example.com"
 
