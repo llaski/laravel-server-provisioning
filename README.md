@@ -32,7 +32,6 @@ ansible-playbook -i hosts deploy.yml --vault-password-file ~/.ansible/vault_pass
 
 To Do
 
-- Bash scripts to fast track setup (php scripts/setup.php yourdomain.com)
 - Figure out how to dynamically set host group for playbook
 - Symlink deployment setup (Zero Downtime)
 
