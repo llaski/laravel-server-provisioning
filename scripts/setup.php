@@ -26,6 +26,7 @@ foreach ($dirs as $dir) {
 
         fileFindReplace($file, 'example.com', $domain);
         fileFindReplace($file, '/example', '/' . $projectFolder);
+        renameFile($file, 'example.com', $domain);
     }
 }
 
@@ -35,6 +36,15 @@ function fileFindReplace($file, $search, $replace)
     $contentChunks = explode($search, $content);
     $content = implode($replace, $contentChunks);
     file_put_contents($file->getPathname(), $content);
+}
+
+function renameFile($file, $search, $replace)
+{
+    if (stripos($file->getFilename(), $search) !== false) {
+        $content = file_get_contents($file->getPathname());
+        file_put_contents(str_replace($search, $replace, $file->getPathname()), $content);
+        unlink($file->getPathname());
+    }
 }
 
 function logStatement($statement)

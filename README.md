@@ -11,10 +11,13 @@ Run Playbooks
 ```
 ansible-playbook -i hosts provision.yml
 ansible-playbook -i hosts deploy.yml
-```
 
+ansible-playbook -i hosts provision.yml --vault-password-file ~/.ansible/vault_pass.txt
+ansible-playbook -i hosts deploy.yml --vault-password-file ~/.ansible/vault_pass.txt
+```
 ## Setup Instructions
 
+- Setup hosts file
 - Setup encryption vault file
 - Customize Variables
 - Encrypt group vars
@@ -24,13 +27,13 @@ ansible-playbook -i hosts deploy.yml
 
 - Add key to github repo
 - Encrypt ssh keys
-- Update hosts file
 
 ######
 
 To Do
 
-- Bash scripts to fast track setup
+- Bash scripts to fast track setup (php scripts/setup.php yourdomain.com)
+- Figure out how to dynamically set host group for playbook
 - Symlink deployment setup (Zero Downtime)
 
 -----
