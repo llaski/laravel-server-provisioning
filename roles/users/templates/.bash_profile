@@ -53,4 +53,4 @@ function ps1_git_dirty {
   [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]] && echo "*"
 }
 
-export PS1="$txtgrn$USER:$txtcyn\$PWD $txtgrn\$(ps1_git_branch)$txtylw ⚡  $txtcyn"
+export PS1="$txtgrn$USER@$HOSTNAME$txtcyn\$PWD $txtgrn\$(ps1_git_branch)$txtylw ⚡  $txtcyn"

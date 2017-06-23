@@ -29,7 +29,9 @@ ansible-playbook -i hosts deploy.yml
 
 To Do
 
-- test deploy playbook
+- fixes around ssl
+    - nginx config for well-known
+    - order of processes (need nginx config w/ out ssl files, run letsncrpt, then enable files in nginx config)
 
 - Advanced
     - Bash scripts to fast track setup

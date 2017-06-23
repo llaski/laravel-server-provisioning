@@ -1,0 +1,25 @@
+---
+
+- name: Install letsencrypt
+  apt: name=letsencrypt state=present
+
+- name: Add Initial SSL Site Config
+  template: src=initial-ssl-setup.conf dest=/etc/nginx/sites-available/initial-ssl-setup owner=root group=root
+
+- name: Enable Initial SSL Site Config
+  file: src=/etc/nginx/sites-available/initial-ssl-setup dest=/etc/nginx/sites-enabled/initial-ssl-setup state=link
+
+- name: Reload Nginx
+  service: name=nginx state=reloaded
+
+- name: Generate SSL Certificate via LetsEncrypt
+  command: "letsencrypt certonly -n --agree-tos -a webroot --webroot-path {{ web_root }} --domain {{ server_name }} --email {{ letsencrypt_email }} --expand --verbose"
+
+- name: Disable Initial SSL Site Config
+  file: path=/etc/nginx/sites-enabled/initial-ssl-setup state=absent
+
+- name: Remove Initial SSL Site Config
+  file: path=/etc/nginx/sites-available/initial-ssl-setup state=absent
+
+- include: setup-site.yml
+

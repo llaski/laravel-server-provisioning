@@ -29,21 +29,21 @@
 
 - name: Copy Root SSH Key for access
   when:
-    - user.use_root_ssh_key
+    - user.copy_ssh_key
     - addedsshdir|success
-  command: cp /root/.ssh/authorized_keys /home/{{ user.name }}/.ssh/authorized_keys
+  command: cp {{ user.copy_ssh_key_path }} /home/{{ user.name }}/.ssh/authorized_keys
   register: authorized_keys
 
 - name: Update Authorized Keys file
   when:
-    - user.use_root_ssh_key
+    - user.copy_ssh_key
     - authorized_keys|success
   file: path=/home/{{ user.name }}/.ssh/authorized_keys owner={{ user.name }} group={{ user.name }} mode=0600
   register: authorized_keys_file_update
 
 - name: Disable password login
   when:
-    - user.use_root_ssh_key
+    - user.copy_ssh_key
     - authorized_keys_file_update|success and not authorized_keys_file_update|skipped
   lineinfile: dest=/etc/ssh/sshd_config regexp="^#?PasswordAuthentication" line="PasswordAuthentication no"
   notify: Restart SSHD

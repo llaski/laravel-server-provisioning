@@ -13,9 +13,6 @@
   notify:
     - Start Nginx
 
-- name: Get PHP Version
-  include_vars: file="../../php/defaults/main.yml"
-
 - name: Add H5BP Config
   copy: src=h5bp dest=/etc/nginx owner=root group=root
 
@@ -29,13 +26,26 @@
   notify:
     - Reload Nginx
 
-- name: Add {{ server_name }} Config
-  template: src={{ server_name }}.conf.j2 dest=/etc/nginx/sites-available/{{ server_name }} owner=root group=root
+- name: Create {{ project_root }} Directory
+  file: path={{ project_root }} state=directory owner=www-data group=www-data recurse=yes
 
-- name: Enable Site Config
-  file: src=/etc/nginx/sites-available/{{ server_name }} dest=/etc/nginx/sites-enabled/{{ server_name }} state=link
-  notify:
-    - Reload Nginx
+#This will check if SSL is set up, and if not set it up the first time
+- name: Check SSL Full Chain File Exists
+  when: ssl_enabled
+  stat: path=/etc/letsencrypt/live/{{ server_name }}/fullchain.pem
+  register: ssl_chain_file
 
-- name: Create Site Directory
-  file: path={{ project_root }} state=directory mode=775 owner=www-data group=www-data recurse=yes
+- name: Check SSL Priv Key File Exists
+  when: ssl_enabled
+  stat: path=/etc/letsencrypt/live/{{ server_name }}/privkey.pem
+  register: ssl_priv_file
+
+- name: Setup SSL
+  when:
+    - ssl_enabled
+    - ssl_chain_file.stat.islnk is not defined or ssl_priv_file.stat.islnk is not defined
+  include: setup-ssl.yml
+
+#This will setup the site configuration if ssl is not enabled or if its already set up
+- when: not ssl_enabled or (ssl_chain_file.stat.islnk is defined and ssl_priv_file.stat.islnk is defined)
+  include: setup-site.yml

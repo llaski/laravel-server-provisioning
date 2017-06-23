@@ -46,6 +46,14 @@
 
     - debug: var=artisan_migrate.stdout_lines
 
+    - name: Artisan Clear Config
+      command: php artisan config:clear
+      args:
+        chdir:  "{{ project_root }}"
+      register: artisan_config_cache
+
+    - debug: var=artisan_config_cache.stdout_lines
+
     - name: Artisan Clear Cache
       command: php artisan cache:clear
       args:
@@ -53,6 +61,9 @@
       register: artisan_clear_cache
 
     - debug: var=artisan_clear_cache.stdout_lines
+
+    - name: Clean up folder/file permissions and user/group settings
+      file: path={{ project_root }} owner=www-data group=www-data recurse=yes
 
     - name: Reload Nginx
       service: name=nginx state=reloaded
