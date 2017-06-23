@@ -9,10 +9,10 @@ if (!$domain) {
 //Set project folder
 $projectFolder = substr($domain, 0, strrpos($domain, '.'));
 
-var_dump('Domain: ' . $domain);
-var_dump('Project Folder: ' . $projectFolder);
+logStatement('Domain: ' . $domain);
+logStatement('Project Folder: ' . $projectFolder);
 
-$dirs = ['group_vars']; //, '../roles'];
+$dirs = ['group_vars', 'roles'];
 $ignoreFiles = ['.', '..'];
 foreach ($dirs as $dir) {
     $it = new RecursiveDirectoryIterator(__DIR__ . '/../' . $dir);
@@ -22,9 +22,10 @@ foreach ($dirs as $dir) {
             continue;
         }
 
-        var_dump('Updating File: ' . $file->getPathname());
+        logStatement('Updating File: ' . $file->getPathname());
 
         fileFindReplace($file, 'example.com', $domain);
+        fileFindReplace($file, '/example', '/' . $projectFolder);
     }
 }
 
@@ -34,4 +35,11 @@ function fileFindReplace($file, $search, $replace)
     $contentChunks = explode($search, $content);
     $content = implode($replace, $contentChunks);
     file_put_contents($file->getPathname(), $content);
+}
+
+function logStatement($statement)
+{
+    print_r($statement);
+echo '
+';
 }
