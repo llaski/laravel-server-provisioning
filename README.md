@@ -24,18 +24,14 @@ ansible-playbook -i hosts deploy.yml
 
 - Add key to github repo
 - Encrypt ssh keys
+- Update hosts file
 
 ######
 
 To Do
 
-- fixes around ssl
-    - nginx config for well-known
-    - order of processes (need nginx config w/ out ssl files, run letsncrpt, then enable files in nginx config)
-
-- Advanced
-    - Bash scripts to fast track setup
-    - Symlink deployment setup (Zero Downtime)
+- Bash scripts to fast track setup
+- Symlink deployment setup (Zero Downtime)
 
 -----
 
